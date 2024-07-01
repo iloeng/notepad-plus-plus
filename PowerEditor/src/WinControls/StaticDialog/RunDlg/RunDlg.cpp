@@ -315,6 +315,7 @@ intptr_t CALLBACK RunDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 		{
 			_dpiManager.setDpiWP(wParam);
 			setPositionDpi(lParam);
+			getWindowRect(_rc);
 
 			return TRUE;
 		}
@@ -392,11 +393,11 @@ intptr_t CALLBACK RunDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 					return TRUE;
 				}
 
-				case IDC_BUTTON_FILE_BROWSER :
+				case IDC_BUTTON_FILE_BROWSER:
 				{
 					CustomFileDialog fd(_hSelf);
-					fd.setExtFilter(TEXT("Executable file : "), { TEXT(".exe"), TEXT(".com"), TEXT(".cmd"), TEXT(".bat") });
-					fd.setExtFilter(TEXT("All files : "), TEXT(".*"));
+					fd.setExtFilter(L"Executable File", { L".exe", L".com", L".cmd", L".bat" });
+					fd.setExtFilter(L"All Files", L".*");
 
 					generic_string fn = fd.doOpenSingleFileDlg();
 					if (!fn.empty())
@@ -446,7 +447,7 @@ void RunDlg::doDialog(bool isRTL)
 		create(IDD_RUN_DLG, isRTL);
 
 	// Adjust the position in the center
-	goToCenter(SWP_HIDEWINDOW | SWP_NOSIZE | SWP_NOACTIVATE);
+	moveForDpiChange();
 	goToCenter(SWP_SHOWWINDOW | SWP_NOSIZE);
 	::SetFocus(::GetDlgItem(_hSelf, IDC_COMBO_RUN_PATH));
 }

@@ -97,6 +97,16 @@ void StaticDialog::goToCenter(UINT swpFlags)
 		::SendMessageW(_hSelf, DM_REPOSITION, 0, 0);
 }
 
+bool StaticDialog::moveForDpiChange()
+{
+	if (_dpiManager.getDpi() != _dpiManager.getDpiForWindow(_hParent))
+	{
+		goToCenter(SWP_HIDEWINDOW | SWP_NOSIZE | SWP_NOACTIVATE);
+		return true;
+	}
+	return false;
+}
+
 void StaticDialog::display(bool toShow, bool enhancedPositioningCheckWhenShowing) const
 {
 	if (toShow)
@@ -253,9 +263,9 @@ void StaticDialog::create(int dialogID, bool isRTL, bool msgDestParent)
 
 	if (!_hSelf)
 	{
-		generic_string errMsg = TEXT("CreateDialogParam() return NULL.\rGetLastError(): ");
+		std::wstring errMsg = L"CreateDialogParam() return NULL.\rGetLastError(): ";
 		errMsg += GetLastErrorAsString();
-		::MessageBox(NULL, errMsg.c_str(), TEXT("In StaticDialog::create()"), MB_OK);
+		::MessageBox(NULL, errMsg.c_str(), L"In StaticDialog::create()", MB_OK);
 		return;
 	}
 
