@@ -406,6 +406,7 @@ LRESULT Notepad_plus::init(HWND hwnd)
 
 	_mainDocTab.display();
 	TabBarPlus::triggerOwnerDrawTabbar(&(_mainDocTab.dpiManager()));
+	drawTabbarColoursFromStylerArray();
 
 	//
 	// Initialize the default foreground & background color
@@ -4649,10 +4650,6 @@ void Notepad_plus::loadBufferIntoView(BufferID id, int whichOne, bool dontClose)
 		if (buf->isDirty() || !buf->isUntitled())
 		{
 			idToClose = BUFFER_INVALID;
-		}
-		else
-		{
-			buf->setLastLangType(-1); // When replacing the "new" tab with an opened file, the last used language should be reset to its initial value so that the language can be reloaded later in the activateBuffer() function.
 		}
 	}
 
